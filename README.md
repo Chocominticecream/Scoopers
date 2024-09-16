@@ -4,6 +4,7 @@
  A game in which you attempt to expand your ice cream tower by piling ice cream
 
 15/9/2024 - brainstormed basic concepts then coded basic physics , will implement game mechanics tomorrow(sticking to other ice cream + ice cream stats)
+16/9/2024 - basic gameplay mechanics implemented! Now Just have to apply meta layers!
 
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
