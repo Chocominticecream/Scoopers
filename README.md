@@ -8,6 +8,8 @@
 16/9/2024 - basic gameplay mechanics implemented! Now Just have to apply meta layers! I could also choose whether to iterate upon the meta layers or go for art and polish 
 after creating three basic ice cream objects, might wanna go for art and polish tbh
 
+17/9/2024 - my depression is acting up again, only managed to create art and basic ice cream objects...
+
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
