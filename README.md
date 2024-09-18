@@ -10,13 +10,15 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 17/9/2024 - my depression is acting up again, only managed to create art and basic ice cream objects...
 
+18/9/2024 -  created even more art and made some basic UI (reused from last project), also added a bit of polish like ui animations and camera panning etc, added timer and scoring system
+
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
 - ~~make ice cream scoops resizabl depending on how long you hold onto a tray and find a way to calculate height of ice cream stack~~
 - ~~shift camera upwards when successfully sticking ice cream to a certain height (remember to adjust the clamping method so that it stops clamping if iskinematic is true)~~
 - create more mechanics such as stickiness/value/scoopability/creaminess, these values affect how high the tower can stack and create 3 basic ice cream scriptableobjects 
-- scoring/money system
+- ~~scoring/money system~~
 - art + polish
 - shop system!
 
