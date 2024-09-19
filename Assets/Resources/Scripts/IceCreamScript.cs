@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class IceCreamScript : MonoBehaviour
 {
@@ -16,55 +17,115 @@ public class IceCreamScript : MonoBehaviour
 
     //other variables
     private float timer = 0f;
+    private float movementheight = 0f;
+    private bool bowl = false;
+    private bool exitFactor = false; //a hacky method that significantly increases sticking chance when leaving collision
+
     private Vector2 minBounds;  // Bottom-left corner of the camera
     private Vector2 maxBounds;
     private Vector3 newPosition;
-    
+    public CircleCollider2D circlecollider;
+    public Collider2D collider;
+
+    public UnityEvent shiftOnheightreached;
+    public UnityEvent swapTrays;
+
+    public int scoopability;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {   
-        ClampObjectWithinCameraBounds();
 
+        // to be disabled if isSticking or attempttostick
+        if(state == STATE.isHeld)
+        {
+            ClampObjectWithinCameraBounds();
+        }
+        
+       
         switch(state)
         {
             case STATE.isHeld:
                 kinetics.velocity = Vector2.zero;
                 kinetics.angularVelocity = 0f;
-                
                 newPosition = MouseWorldPosition() + offset;
-
                 kinetics.MovePosition(newPosition);
+                collider.enabled = false;
                 break;
             case STATE.attemptToStick:
-                kinetics.velocity *= 0.995f;
-                kinetics.angularVelocity *= 0.995f;
+                
+                //push the object a little bit if not sticking, prevents situations where
+                //the ice cream stays completely stationary when it doesn't make sense to
+                if (kinetics.velocity.magnitude < 0.01f)
+                {      
+                    kinetics.velocity = new Vector2(0.2f, 0f);
+                    kinetics.angularVelocity = 0.1f;
+                }
+                kinetics.velocity *= 0.997f;
+                kinetics.angularVelocity *= 0.997f;
+
+                timer += Time.deltaTime;
+                if(timer >= 1f)
+                {
+
+                    //roll a number between 1-20 if less than 3/ stickiness value, stick
+                    int rand = Random.Range(1,20);
+                    if(exitFactor)
+                    {
+                        rand = (int)(rand*1.5);
+                        exitFactor = false;
+                    }
+
+                    if(rand < 3 || bowl)
+                    {
+                        DarkenColor();
+                        print("sticking!");
+                        movementheight = CalculateHighestPoint();
+                        state = STATE.isSticking;
+                        shiftOnheightreached.Invoke();
+                    }
+                    else
+                    {
+                        print("not sticking!");
+                    }
+
+                    
+                 
+                    timer = 0f;
+                }
+                
+                //small jolt timer to recaclulate if the ice cream is idle for too long
+                // // for testing
+                // state = STATE.isSticking;
                 break;
             case STATE.isSticking:
+                kinetics.isKinematic = true;
+                kinetics.velocity = Vector2.zero;
+                kinetics.angularVelocity = 0f;
                 break;
             default:
                 break;
 
         }
         
-        //physics correction methods
-        if (kinetics.velocity.magnitude < 0.01f && state != STATE.isSticking)
-        {      
-            kinetics.velocity = new Vector2(0.2f, 0f);
-            kinetics.angularVelocity = 0.1f;
-        }
-
-        
     }
 
-    void Awake()
+    private void Awake()
     {
         kinetics = GetComponent<Rigidbody2D>();
+        circlecollider = GetComponent<CircleCollider2D>();
+        collider =  GetComponent<Collider2D>();
+        HeightLineCollisionScript heightline = GameObject.FindWithTag("HeightLineCollision").GetComponent<HeightLineCollisionScript>();
+        shiftOnheightreached.AddListener(() => heightline.checkHeight(movementheight));
+
+        TrayIterator trayIterator = GameObject.FindWithTag("TrayIterator").GetComponent<TrayIterator>();
+        swapTrays.AddListener(() => trayIterator.iterateTrays());
     }
 
     private Vector3 MouseWorldPosition()
@@ -75,57 +136,93 @@ public class IceCreamScript : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mouseScreenPos);
     }
 
-    void OnMouseDrag()
+    private void OnMouseDrag()
     {
         
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         if(state == STATE.idle)
         {
-            print("held!");
+
             state = STATE.isHeld;
             offset = transform.position - MouseWorldPosition();
         }
         
     }
 
-    void OnMouseUp()
+    public void OnMouseUp()
     {
         if(state == STATE.isHeld)
         {
             state = STATE.idle;
-            print("let go!");
+            collider.enabled = true;
+
+            
+            //hacky technique to make the object jump an extremely small amount
+            //so that it checks collisions properly if its let go when in contact 
+            //with another collision
+            Vector2 jumpForce = new Vector2(0f, 0.5f);
+            kinetics.AddForce(jumpForce, ForceMode2D.Impulse);
+            swapTrays.Invoke();
+            transform.position = new Vector3(transform.position.x, transform.position.y, -10f); 
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //inot yandere dev i just coded tis in 2 days pls dont @ me
         //check if touching object is ice cream that is sticking and if self is idle state
         if(collision.gameObject.GetComponent<IceCreamScript>() != null 
-           && state == STATE.idle
-           && collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking) 
+           && (collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking || collision.gameObject.GetComponent<IceCreamScript>().state == STATE.attemptToStick)
+           && state == STATE.idle)
+        //    && (collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking || collision.gameObject.GetComponent<IceCreamScript>().state == STATE.attemptToStick)) 
         {
             state = STATE.attemptToStick;
-            print("touching!");
+
         }
         //always stick successfully on the bowl object
         else if(collision.gameObject.GetComponent<Bowl>() != null  && state == STATE.idle)
         {
-            kinetics.isKinematic = true;
-            kinetics.velocity = Vector2.zero;
-            kinetics.angularVelocity = 0f;
-            state = STATE.isSticking;
+            bowl = true;
+            state = STATE.attemptToStick;
+        }
+        else if (collision.gameObject.GetComponent<Ground>() != null  && state != STATE.isHeld)
+        {
+            Destroy(gameObject);
+        }
+
+        if(collision.gameObject.GetComponent<IceCreamScript>() != null
+           && collision.gameObject.GetComponent<IceCreamScript>().state == STATE.attemptToStick
+           && state != STATE.isSticking)
+        {
+            state = STATE.attemptToStick;
         }
     
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.GetComponent<IceCreamScript>() != null)
+        if(collision.gameObject.GetComponent<IceCreamScript>() != null 
+           && state == STATE.attemptToStick
+           && collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking)
         {
-            print("left from touching!");
+            state = STATE.idle;
+            Vector2 jumpForce = new Vector2(0f, 0.5f);
+            kinetics.AddForce(jumpForce, ForceMode2D.Impulse); 
+            //this boolean here forces the ice cream to stick faster when exiting
+            //this is so that if it gets stuck between two ice creams it will stick faster to them
+            // hacky solution
+            exitFactor =  true;
+            print("exitfactor detected!");
+            //set timer to 1f so that it sticks faster when in contact with two collisions
+            //since that usually means that the ice cream is in a stable spot
+            //so might as well stick quicker as well as to prevent delayed sticking
+            //when the ice cream constantly exits and enters collisions
+
+            timer += 1f;
+
         }
     }
 
@@ -140,7 +237,7 @@ public class IceCreamScript : MonoBehaviour
 
         // Clamp the position within the camera bounds
         currentPosition.x = Mathf.Clamp(currentPosition.x, minBounds.x, maxBounds.x);
-        currentPosition.y = Mathf.Clamp(currentPosition.y, minBounds.y, maxBounds.y);
+        //currentPosition.y = Mathf.Clamp(currentPosition.y, minBounds.y, maxBounds.y);
 
         // Check if position needs adjustment
         if (currentPosition != transform.position)
@@ -149,4 +246,35 @@ public class IceCreamScript : MonoBehaviour
             kinetics.MovePosition(currentPosition);
         }
     }
+
+    private float CalculateHighestPoint()
+    {
+        //get center coords 
+        Vector2 center = circlecollider.bounds.center;
+
+        //get radius, taking scale in account
+        float radius = circlecollider.radius * transform.lossyScale.y;
+
+        print(transform.lossyScale.y);
+
+        float highestPoint = center.y + radius;
+
+        print("highest point: " + highestPoint);
+
+        return highestPoint;
+
+    }
+
+    private void DarkenColor()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+        {
+            Color currentColor = spriteRenderer.color;
+            Color darkenedColor = currentColor * 0.9f;
+            spriteRenderer.color = darkenedColor;
+        }
+    }
+
 }
