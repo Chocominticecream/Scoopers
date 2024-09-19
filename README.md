@@ -21,11 +21,11 @@ TODO:
 - ~~scoring/money system~~
 - art + polish
 - shop system!
-Shop todo:
-- money system
-- lock ice creams that are locked and you have to pay for them
-- option to buy more seconds on the timer
-- more transitions + more art for the ice creams
+- Shop todo:
+   - money system
+   - lock ice creams that are locked and you have to pay for them
+   - option to buy more seconds on the timer
+   - more transitions + more art for the ice creams
 
 other stuff:
 - change the ice cream sticking algorithm to roll to a set amount of seconds instead of RNG
