@@ -12,6 +12,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 18/9/2024 -  created even more art and made some basic UI (reused from last project), also added a bit of polish like ui animations and camera panning etc, added timer and scoring system
 
+19/9/2024 -20/9/2024 -  fully implemented shop system
+
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
