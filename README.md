@@ -19,8 +19,9 @@ TODO:
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
 - ~~make ice cream scoops resizabl depending on how long you hold onto a tray and find a way to calculate height of ice cream stack~~
 - ~~shift camera upwards when successfully sticking ice cream to a certain height (remember to adjust the clamping method so that it stops clamping if iskinematic is true)~~
-- create more mechanics such as stickiness/value/scoopability/creaminess, these values affect how high the tower can stack and create 3 basic ice cream scriptableobjects 
+- ~~create more mechanics such as stickiness/value/scoopability/creaminess, these values affect how high the tower can stack and create 3 basic ice cream scriptableobjects~~ 
 - ~~scoring/money system~~
+- delete all ice creams that are not sticking at the end of the timer
 - art + polish
 - ~~shop system!~~
 - Shop todo:
