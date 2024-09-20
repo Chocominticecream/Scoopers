@@ -22,6 +22,7 @@ TODO:
 - ~~create more mechanics such as stickiness/value/scoopability/creaminess, these values affect how high the tower can stack and create 3 basic ice cream scriptableobjects~~ 
 - ~~scoring/money system~~
 - delete all ice creams that are not sticking at the end of the timer
+- main menu
 - art + polish
 - ~~shop system!~~
 - Shop todo:
