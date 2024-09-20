@@ -40,3 +40,4 @@ BUGS (those that i cannot recreate exactly at least)
 - ~~ice cream will get flung suddenly when placing it on ice cream~~
 - ice cream sometimes reverts to idle state, possibly caused when in contact with another ice cream when in attempttostick state
 - ice cream tray sometimes spawn multiple ice creams when mouse down is held
+- Performance intensive bug causes scooping ice cream to be much slower in the web build, to fix this , maybe invoke repeating can be used.
