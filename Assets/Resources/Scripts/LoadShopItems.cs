@@ -8,7 +8,7 @@ public class LoadShopItems : MonoBehaviour
     public GameObject shopSlots;
     public GameObject iceCreamUIobj;
     private Singleton singleton;
-    public int currentScroll = 0;
+    private int currentScroll = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,8 +36,7 @@ public class LoadShopItems : MonoBehaviour
             
             IceCreamUI codecomponent = instantiatedUI.GetComponent<IceCreamUI>();
             codecomponent.iceCreamObj = iceCreamData;
-
-
+            codecomponent.state = IceCreamUI.STATE.lockedInShop;
             // Sprite newsprite = Sprite.Create(iceCreamData.iceCreamGraphic, new Rect(0, 0, iceCreamData.iceCreamGraphic.width, iceCreamData.iceCreamGraphic.height), new Vector2(0.5f, 0.5f));
             // instantiatedUI.GetComponent<Image>().sprite = newsprite;
             // IceCreamUI codecomponent = instantiatedUI.GetComponent<IceCreamUI>();
@@ -46,27 +45,46 @@ public class LoadShopItems : MonoBehaviour
 
         }
         
-        //explicitly set equipped items in the shop
-        foreach(IceCreamScriptable iceCreamData in singleton.iceCreamsUsed)
+        
+         foreach(Transform iceCreamUI in shopSlots.transform)
         {
-            foreach(Transform iceCreamUI in shopSlots.transform)
+            IceCreamUI icecreamComponent = iceCreamUI.gameObject.GetComponent<IceCreamUI>();
+
+            //unlock all locked items
+            foreach(string unlockedItem in singleton.unlocked)
             {
-                if(iceCreamUI.gameObject.GetComponent<IceCreamUI>().name == iceCreamData.name)
+                if(icecreamComponent.name == unlockedItem)
+                {
+                    icecreamComponent.state = IceCreamUI.STATE.inShop;
+                }
+                
+            }
+            
+            //set all equipped items
+            foreach(IceCreamScriptable iceCreamData in singleton.iceCreamsUsed)
+            {
+                //explicitly set equipped items in the shop
+                if(icecreamComponent.name == iceCreamData.name)
                 {
                     print("set equipped!");
-                    iceCreamUI.gameObject.GetComponent<IceCreamUI>().state = IceCreamUI.STATE.equippedInShop;
+                    icecreamComponent.state = IceCreamUI.STATE.equippedInShop;
                 }
 
             }
+            
         }
     }
 
     public void ScrollShop(bool rightScroll)
     {
         float scrollValue = 850 / 6;
+        int scrollFactor = singleton.allIceCreams.Length - 6;
         if(rightScroll)
         {
-            currentScroll += 1;
+            if(currentScroll < scrollFactor)
+            {
+                currentScroll += 1;
+            }
         }
         else
         {

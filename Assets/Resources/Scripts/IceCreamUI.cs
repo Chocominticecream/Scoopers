@@ -9,23 +9,23 @@ public class IceCreamUI : MonoBehaviour
 {
     public UnityEvent selectClick;
     public UnityEvent alternateClick;
-    public enum STATE {equipped, inShop, selectedInShop, equippedInShop};
+    public enum STATE {equipped, inShop, selectedInShop, lockedInShop, selectedlockedInShop, equippedInShop};
 
-    public RectTransform recttransform;
-    public GameObject selectedIndicator;
-
+    private RectTransform recttransform;
+    [SerializeField] private GameObject selectedIndicator;
+    [SerializeField] private GameObject lockedIndicator;
     private CanvasGroup canvasGroup;
-
-    public bool unlocked = false;
-    public string name = "";
+    
 
     //for selection
     private Color darkenedColor;
     private Color originalColor;
     private Image imageComponent;
 
-
-    public STATE state = STATE.inShop;
+    
+    public string name = "";
+    public int cost = 0;
+    public STATE state = STATE.lockedInShop;
 
     private IceCreamScriptable _iceCreamObj;
 
@@ -36,6 +36,7 @@ public class IceCreamUI : MonoBehaviour
         {
             _iceCreamObj = value;
             name = _iceCreamObj.name;
+            cost = _iceCreamObj.cost;
             Sprite newsprite = Sprite.Create(_iceCreamObj.iceCreamGraphic, new Rect(0, 0, _iceCreamObj.iceCreamGraphic.width, _iceCreamObj.iceCreamGraphic.height), new Vector2(0.5f, 0.5f));
             GetComponent<Image>().sprite = newsprite;
         }
@@ -55,9 +56,14 @@ public class IceCreamUI : MonoBehaviour
             normaliseColor();
         }
 
-        if(state != STATE.selectedInShop)
+        if(state != STATE.selectedInShop && state != STATE.selectedlockedInShop)
         {
             selectedIndicator.SetActive(false);
+        }
+
+        if(state != STATE.lockedInShop && state != STATE.selectedlockedInShop)
+        {
+            lockedIndicator.SetActive(false);
         }
 
         switch(state)
@@ -67,6 +73,13 @@ public class IceCreamUI : MonoBehaviour
                 break;
             case STATE.selectedInShop:
                 selectedIndicator.SetActive(true);
+                break;
+            case STATE.selectedlockedInShop:
+                selectedIndicator.SetActive(true);
+                lockedIndicator.SetActive(true);
+                break;
+            case STATE.lockedInShop:
+                lockedIndicator.SetActive(true);
                 break;
             case STATE.inShop:
                 break;
@@ -91,7 +104,7 @@ public class IceCreamUI : MonoBehaviour
 
     public void OnClick()
     {
-        if(state == STATE.inShop)
+        if(state == STATE.inShop || state == STATE.lockedInShop)
         {
             selectClick.Invoke();
         }

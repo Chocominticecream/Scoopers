@@ -11,6 +11,7 @@ public class TimeUIScript : MonoBehaviour
     [SerializeField] private GameObject timerEndTransitionobj;
     [SerializeField] private MenuUnityEvent endingTrans = new MenuUnityEvent();
     [SerializeField] private UnityEvent blockPanel;
+    public UnityEvent destroyAll;
 
     private Singleton singleton;
     private float timeCounter = 0f;
@@ -57,6 +58,7 @@ public class TimeUIScript : MonoBehaviour
             {
                 endingTrans.Invoke(timerEndTransitionobj);
                 blockPanel.Invoke();
+                destroyAll.Invoke();
             }
             pauseTimer = true;
             
@@ -69,7 +71,9 @@ public class TimeUIScript : MonoBehaviour
         singleton = Singleton.Instance;
         time = singleton.timer;
         UIController findUI = GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>();
+        DestroyAll findspawn = GameObject.FindGameObjectWithTag("IceCreamSpawn").GetComponent<DestroyAll>();
         endingTrans.AddListener(findUI.CallUIObject);
+        destroyAll.AddListener(findspawn.DestroyAllNonSticking);
     }
 
 

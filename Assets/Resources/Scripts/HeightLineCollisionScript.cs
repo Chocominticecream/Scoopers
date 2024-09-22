@@ -6,11 +6,14 @@ using UnityEngine.Events;
 public class HeightLineCollisionScript : MonoBehaviour
 {
     private float movementval = 3f;
+    private float currentHeight = 0f;
     private Collider2D heightCollision;
     private IceCreamScript iceCreaminCollision;
     private bool isInCollision = false;
     public UnityEvent moveCamera;
     public UnityEvent moveLine;
+
+    private Singleton singleton;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +35,7 @@ public class HeightLineCollisionScript : MonoBehaviour
     //interestingly all update() scripts stop if awake has a runtime error
     void Awake()
     {
+        singleton = Singleton.Instance;
         //heightCollision = transform.Find("HeightLine").GetComponent<Collider2D>();
         MoveCamera moveCameraScript = GameObject.FindWithTag("MainCamera").GetComponent<MoveCamera>();
         moveCamera.AddListener(() => moveCameraScript.ShiftCamera(movementval));
@@ -42,6 +46,9 @@ public class HeightLineCollisionScript : MonoBehaviour
 
     public void checkHeight(float icecreamheight)
     {
+        currentHeight = icecreamheight + 2f;
+        singleton.heightHandler = (int)Mathf.Floor(currentHeight);
+
         print(icecreamheight);
         while(icecreamheight >= movementval)
         {

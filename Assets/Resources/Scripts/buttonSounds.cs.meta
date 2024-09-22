@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 87e9fea1ca1336843b141fd94518ffa9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - audioPlayer: {fileID: 547469264507916948, guid: 7707d748f8c9c394c9f3cf6724dde35f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

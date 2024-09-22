@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7479689265896717076}
   - component: {fileID: 173540937966796134}
   - component: {fileID: 5662121870237673948}
+  - component: {fileID: 8471167114075724042}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -137,6 +138,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8471167114075724042}
+        m_TargetAssemblyTypeName: buttonSounds, Assembly-CSharp
+        m_MethodName: buttonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7479689265896717076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +226,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8471167114075724042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4544268384307253393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e9fea1ca1336843b141fd94518ffa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioPlayer: {fileID: 547469264507916948, guid: 7707d748f8c9c394c9f3cf6724dde35f, type: 3}
 --- !u!1 &6235134800619503286
 GameObject:
   m_ObjectHideFlags: 0

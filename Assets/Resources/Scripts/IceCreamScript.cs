@@ -20,17 +20,41 @@ public class IceCreamScript : MonoBehaviour
     private float movementheight = 0f;
     private bool bowl = false;
     private bool exitFactor = false; //a hacky method that significantly increases sticking chance when leaving collision
+    private bool plopPlayed = false;
 
     private Vector2 minBounds;  // Bottom-left corner of the camera
     private Vector2 maxBounds;
     private Vector3 newPosition;
     public CircleCollider2D circlecollider;
     public Collider2D collider;
+    public GameObject darkeninglayer;
+    public GameObject audioPlayer;
+    public GameObject snowflake;
 
     public UnityEvent shiftOnheightreached;
     public UnityEvent swapTrays;
-
+    
+    //ice cream vars
     public int scoopability;
+    public int reward;
+    public int stickiness;
+
+    private IceCreamScriptable _iceCreamObj;
+
+    public IceCreamScriptable iceCreamObj
+    {
+        get {return _iceCreamObj;}
+        set
+        {
+            _iceCreamObj = value;
+            name = _iceCreamObj.name;
+            reward = _iceCreamObj.value;
+            scoopability = _iceCreamObj.scoopability;
+            stickiness = _iceCreamObj.stickiness;
+            Sprite newsprite = Sprite.Create(_iceCreamObj.iceCreamGraphic, new Rect(0, 0, _iceCreamObj.iceCreamGraphic.width, _iceCreamObj.iceCreamGraphic.height), new Vector2(0.5f, 0.5f));
+            GetComponent<SpriteRenderer>().sprite = newsprite;
+        }
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -75,19 +99,20 @@ public class IceCreamScript : MonoBehaviour
                 {
 
                     //roll a number between 1-20 if less than 3/ stickiness value, stick
-                    int rand = Random.Range(1,20);
+                    int rand = Random.Range(1,25);
                     if(exitFactor)
                     {
                         rand = (int)(rand*1.5);
                         exitFactor = false;
                     }
 
-                    if(rand < 3 || bowl)
+                    if(rand < 4 +(int)((stickiness-1)*2) || bowl)
                     {
-                        DarkenColor();
+                        Darken();
                         print("sticking!");
-                        movementheight = CalculateHighestPoint();
+                        movementheight = CalculatePoint(true);
                         state = STATE.isSticking;
+                        Instantiate(audioPlayer).GetComponent<AudioController>().pickPuzzle();
                         shiftOnheightreached.Invoke();
                     }
                     else
@@ -172,7 +197,13 @@ public class IceCreamScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //inot yandere dev i just coded tis in 2 days pls dont @ me
+        if(!plopPlayed && collision.gameObject.GetComponent<Ground>() == null)
+        {
+            Instantiate(audioPlayer).GetComponent<AudioController>().PlopIceCream();
+            Instantiate(snowflake, new Vector3(transform.position.x, CalculatePoint(false), transform.position.z), Quaternion.identity);
+            plopPlayed = true;
+        }
+        //im not yandere dev i just coded tis in 2 days pls dont @ me
         //check if touching object is ice cream that is sticking and if self is idle state
         if(collision.gameObject.GetComponent<IceCreamScript>() != null 
            && (collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking || collision.gameObject.GetComponent<IceCreamScript>().state == STATE.attemptToStick)
@@ -190,7 +221,7 @@ public class IceCreamScript : MonoBehaviour
         }
         else if (collision.gameObject.GetComponent<Ground>() != null  && state != STATE.isHeld)
         {
-            Destroy(gameObject);
+            DestroyIceCream();
         }
 
         if(collision.gameObject.GetComponent<IceCreamScript>() != null
@@ -209,8 +240,8 @@ public class IceCreamScript : MonoBehaviour
            && collision.gameObject.GetComponent<IceCreamScript>().state == STATE.isSticking)
         {
             state = STATE.idle;
-            Vector2 jumpForce = new Vector2(0f, 0.5f);
-            kinetics.AddForce(jumpForce, ForceMode2D.Impulse); 
+            // Vector2 jumpForce = new Vector2(0f, 0.5f);
+            // kinetics.AddForce(jumpForce, ForceMode2D.Impulse); 
             //this boolean here forces the ice cream to stick faster when exiting
             //this is so that if it gets stuck between two ice creams it will stick faster to them
             // hacky solution
@@ -247,7 +278,7 @@ public class IceCreamScript : MonoBehaviour
         }
     }
 
-    private float CalculateHighestPoint()
+    private float CalculatePoint(bool highest)
     {
         //get center coords 
         Vector2 center = circlecollider.bounds.center;
@@ -256,14 +287,24 @@ public class IceCreamScript : MonoBehaviour
         float radius = circlecollider.radius * transform.lossyScale.y;
 
         print(transform.lossyScale.y);
-
-        float highestPoint = center.y + radius;
+        
+        float highestPoint = 0f;
+        if(highest)
+        {
+            highestPoint = center.y + radius;
+        }
+        else
+        {
+            highestPoint = center.y - radius;
+        }
+        
 
         print("highest point: " + highestPoint);
 
         return highestPoint;
 
     }
+    
 
     private void DarkenColor()
     {
@@ -275,6 +316,18 @@ public class IceCreamScript : MonoBehaviour
             Color darkenedColor = currentColor * 0.9f;
             spriteRenderer.color = darkenedColor;
         }
+    }
+
+    private void Darken()
+    {
+        darkeninglayer.SetActive(true);
+    }
+
+    public void DestroyIceCream()
+    {
+        Instantiate(snowflake, transform.position, Quaternion.identity);
+        Instantiate(audioPlayer).GetComponent<AudioController>().DestroyIceCream();
+        Destroy(gameObject);
     }
 
 }

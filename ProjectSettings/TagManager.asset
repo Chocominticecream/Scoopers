@@ -9,6 +9,8 @@ TagManager:
   - HeightLineCollision
   - TrayIterator
   - UIController
+  - ShopController
+  - Tutorial
   layers:
   - Default
   - TransparentFX

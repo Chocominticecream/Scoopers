@@ -11,14 +11,16 @@ public class IceCreamTrayScript : MonoBehaviour
     public GameObject spawnpointpos;
 
     public GameObject currentScoop; //
+    public UnityEvent deactivateScoopTutorial;
+    public UnityEvent deactivateDropTutorial;
     private bool scooping = false;
 
     //values for ice cream prefab (since prefabs can only be assigned values on instantiation)
     public Sprite newsprite; //
     private Image imageComponent;
-
-
     RectTransform rectTransform;
+
+    private int scoopability = 0;
 
     private IceCreamScriptable _iceCreamData;
 
@@ -29,6 +31,7 @@ public class IceCreamTrayScript : MonoBehaviour
         {
             print("setting data..");
             _iceCreamData = value;
+            scoopability = _iceCreamData.scoopability;
             newsprite = Sprite.Create(_iceCreamData.iceCreamGraphic, new Rect(0, 0, _iceCreamData.iceCreamGraphic.width, _iceCreamData.iceCreamGraphic.height), new Vector2(0.5f, 0.5f));
             transform.Find("ColliderGraphic").GetComponent<Image>().color = SetColorFromHex(_iceCreamData.colorcode);
         }
@@ -44,13 +47,17 @@ public class IceCreamTrayScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(scooping)
-        {
-            //slowly enlarge ice cream over time
-            currentScoop.transform.localScale += new Vector3(0.0005f, 0.0005f, 0f);
+        // if(scooping)
+        // {
+        //     if (currentScoop.transform.localScale.x < (1f+(scoopability-2)*0.1) && currentScoop.transform.localScale.y < (1f+(scoopability-2)*0.1))
+        //     {
+        //         //slowly enlarge ice cream over time
+        //         currentScoop.transform.localScale += new Vector3(0.0002f+((scoopability-1)*0.0001f), 0.0002f+((scoopability-1)*0.0001f), 0f);
+        //     }
+            
             // // old
             //currentScoop.transform.localScale += new Vector3(0.0001f, 0.0001f, 0f);
-        }
+        // }
     }
 
     void Awake()
@@ -58,6 +65,10 @@ public class IceCreamTrayScript : MonoBehaviour
         //pretty risky to reference the object directly but just wanted to keep the spawn code contained
         spawnpoint = GameObject.FindWithTag("IceCreamSpawn");
         rectTransform = GetComponent<RectTransform>();
+
+        TutorialObjectScript tutorialObjectScript = GameObject.FindWithTag("Tutorial").GetComponent<TutorialObjectScript>();
+        deactivateScoopTutorial.AddListener(() => tutorialObjectScript.OnScoopActivate());
+        deactivateDropTutorial.AddListener(() => tutorialObjectScript.OnDropActivate());
     }
 
     public void OnScoop()
@@ -70,6 +81,7 @@ public class IceCreamTrayScript : MonoBehaviour
             //set scoop position, z value, state and initial scale
             GameObject scoop = Instantiate(iceCream,  MouseWorldPosition(), Quaternion.identity);
             scoop.transform.position = new Vector3(scoop.transform.position.x, scoop.transform.position.y, -21f);
+            scoop.transform.SetParent(spawnpoint.transform);
 
             //set the state
             IceCreamScript icecreamComponent = scoop.GetComponent<IceCreamScript>();
@@ -77,17 +89,13 @@ public class IceCreamTrayScript : MonoBehaviour
             
             //set scriptable objects values
             //set the sprite
-            newsprite = Sprite.Create(iceCreamData.iceCreamGraphic, new Rect(0, 0, iceCreamData.iceCreamGraphic.width, iceCreamData.iceCreamGraphic.height), new Vector2(0.5f, 0.5f));
-            SpriteRenderer iceCreamSpriteComponent = scoop.GetComponent<SpriteRenderer>();
-            iceCreamSpriteComponent.sprite = newsprite;
-
-            //set scoopability
-            icecreamComponent.scoopability = iceCreamData.scoopability;
-            
+            icecreamComponent.iceCreamObj = iceCreamData;
             //set initialscale plus other values
             scoop.transform.localScale = new Vector3(0.1f, 0.1f, scoop.transform.position.z);
             currentScoop = scoop;
             scooping = true;
+            InvokeRepeating("ScoopBigger", 0f, 1f / 30f);
+            deactivateScoopTutorial.Invoke();
         }
 
         print("scooping!");
@@ -98,18 +106,20 @@ public class IceCreamTrayScript : MonoBehaviour
         if(currentScoop != null)
         {
             IceCreamScript icecreamComponent = currentScoop.GetComponent<IceCreamScript>();
-            currentScoop.transform.SetParent(spawnpoint.transform);
             icecreamComponent.OnMouseUp();
             
             scooping = false;
             icecreamComponent.collider.enabled = true;
             currentScoop = null;
+            deactivateDropTutorial.Invoke();
+            CancelInvoke("ScoopBigger");
         }
         print("scooping ended!");
     }
 
     public void ExitTray()
     {
+        CancelInvoke("ScoopBigger");
         scooping = false;
     }
 
@@ -144,6 +154,15 @@ public class IceCreamTrayScript : MonoBehaviour
             LeanTween.move(rectTransform, new Vector2(-500, rectTransform.anchoredPosition.y), 3f).setEaseOutExpo();
             //rectTransform.anchoredPosition = new Vector2(-500, rectTransform.anchoredPosition.y);
         }
+    }
+
+    public void ScoopBigger()
+    {
+         if(currentScoop.transform.localScale.x < (1f+(scoopability-2)*0.1) && currentScoop.transform.localScale.y < (1f+(scoopability-2)*0.1))
+         {
+            currentScoop.transform.localScale += new Vector3(0.002f+((scoopability-1)*0.001f), 0.002f+((scoopability-1)*0.001f), 0f);
+         }
+         
     }
 
 }

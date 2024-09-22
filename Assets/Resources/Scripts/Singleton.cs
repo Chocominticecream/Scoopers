@@ -7,10 +7,22 @@ public class Singleton : MonoBehaviour
     public string test = "test!";
     public static Singleton Instance = new Singleton();
 
-    public IceCreamScriptable[] iceCreamsUsed = new IceCreamScriptable[3];
+    
     public IceCreamScriptable[] allIceCreams;
-    public int timer = 10;
+    
+    //temp variables
+    public int scoreHandler = 0;
+    public int heightHandler = 0;
+    
+    //variables to be saved
+    public int timer = 30;
+    public int money = 5;
+    public int timesTimerBought = 0;
     public bool startersLoaded = false;
+    public List<string> unlocked = new List<string> {"Chocolate", "Strawberry", "Vanilla"};
+    public IceCreamScriptable[] iceCreamsUsed = new IceCreamScriptable[3];
+    public bool tutorialPlayed = false;
+
 
     public void Shuffle<T>(IList<T> list)
     {
@@ -47,15 +59,20 @@ public class Singleton : MonoBehaviour
     //also loads all icecream objects for reference
     public void LoadStarterIceCreams()
     {
+        //by right there should be a more modular way to do this but it may make things too complicated and require more time
+        //so i will settle for this
+        scoreHandler = 0;
+        heightHandler = 0;
+
         if(!startersLoaded)
         {
             print("loading starters..");
-            IceCreamScriptable chocolate = Resources.Load<IceCreamScriptable>("IceCreamScriptables/001-Chocolate");
-            IceCreamScriptable strawberry = Resources.Load<IceCreamScriptable>("IceCreamScriptables/002-Strawberry");
+            IceCreamScriptable chocolate = Resources.Load<IceCreamScriptable>("IceCreamScriptables/002-Chocolate");
+            IceCreamScriptable strawberry = Resources.Load<IceCreamScriptable>("IceCreamScriptables/001-Strawberry");
             IceCreamScriptable vanilla = Resources.Load<IceCreamScriptable>("IceCreamScriptables/003-Vanilla");
 
-            iceCreamsUsed[0] = chocolate;
-            iceCreamsUsed[1] = strawberry;
+            iceCreamsUsed[0] = strawberry;
+            iceCreamsUsed[1] = chocolate;
             iceCreamsUsed[2] = vanilla;
             startersLoaded = true;
             allIceCreams = Resources.LoadAll<IceCreamScriptable>("IceCreamScriptables/");
