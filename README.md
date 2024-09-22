@@ -49,7 +49,7 @@ post jam tasks(maybe i will do it, maybe i won't)
 - rebalance mechanics as some playtesting with family members revealed that the game isn't fun in some areas (too hard, no goals)
 
 ---
-###Screenshots/other art:
+### Screenshots/other art:
 
 ![promotionimage3](https://github.com/user-attachments/assets/5565de4d-d7c2-4784-935d-230374b66da5)
 
