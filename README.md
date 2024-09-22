@@ -49,6 +49,7 @@ BUGS (those that i cannot recreate exactly at least)
 
 post jam tasks(maybe i will do it, maybe i won't)
 - restructure the code so I can actually reuse it for future projects (im looking at the shopUI code)
+- second note on restructuring shop code, make selecting items in the shop decided by a boolean statement instead of a state machine
 - rebalance mechanics as some playtesting with family members revealed that the game isn't fun in some areas (too hard, no goals)
 
 ---
