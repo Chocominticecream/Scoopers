@@ -43,3 +43,20 @@ BUGS (those that i cannot recreate exactly at least)
 - ice cream sometimes reverts to idle state, possibly caused when in contact with another ice cream when in attempttostick state
 - ice cream tray sometimes spawn multiple ice creams when mouse down is held
 - ~~Performance intensive bug causes scooping ice cream to be much slower in the web build, to fix this , maybe invoke repeating can be used (IMPORTANT)~~
+
+post jam tasks(maybe i will do it, maybe i won't)
+- restructure the code so I can actually reuse it for future projects (im looking at the shopUI code)
+- rebalance mechanics as some playtesting with family members revealed that the game isn't fun in some areas (too hard, no goals)
+
+---
+###Screenshots/other art:
+![promotionimage3](https://github.com/user-attachments/assets/5565de4d-d7c2-4784-935d-230374b66da5)
+
+![promotion1](https://github.com/user-attachments/assets/6860fb0e-2ad0-421c-9835-6dc05f6a4d64)
+
+![promogif3](https://github.com/user-attachments/assets/d7723fda-a26a-4551-9086-a331c8c06125)
+
+![promotionimage](https://github.com/user-attachments/assets/28d4caba-1684-40b8-a6dd-64b8139640af)
+
+
+
