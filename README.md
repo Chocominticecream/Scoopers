@@ -50,6 +50,7 @@ post jam tasks(maybe i will do it, maybe i won't)
 
 ---
 ###Screenshots/other art:
+
 ![promotionimage3](https://github.com/user-attachments/assets/5565de4d-d7c2-4784-935d-230374b66da5)
 
 ![promotion1](https://github.com/user-attachments/assets/6860fb0e-2ad0-421c-9835-6dc05f6a4d64)
