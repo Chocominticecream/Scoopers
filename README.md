@@ -14,6 +14,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 19/9/2024 -20/9/2024 -  fully implemented shop system + other mechanics, just need some tweaks here and there and a bit of art and i should be done!
 
+21/9/2024 - finally finished the game!
+
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
@@ -21,15 +23,15 @@ TODO:
 - ~~shift camera upwards when successfully sticking ice cream to a certain height (remember to adjust the clamping method so that it stops clamping if iskinematic is true)~~
 - ~~create more mechanics such as stickiness/value/scoopability/creaminess, these values affect how high the tower can stack and create 3 basic ice cream scriptableobjects~~ 
 - ~~scoring/money system~~
-- delete all ice creams that are not sticking at the end of the timer
-- main menu
-- art + polish
+- ~~delete all ice creams that are not sticking at the end of the timer~~
+- ~~main menu~~
+- ~~art + polish~~
 - ~~shop system!~~
 - Shop todo:
    - ~~money system~~
    - ~~lock ice creams that are locked and you have to pay for them~~
    - ~~option to buy more seconds on the timer~~
-   - more transitions + more art for the ice creams
+   - ~~more transitions + more art for the ice creams~~
    - ~~calculate height and results~~ (just height only, i have no time to fine tune additional mechanics)
    - ~~attributes~~
 
@@ -40,4 +42,4 @@ BUGS (those that i cannot recreate exactly at least)
 - ~~ice cream will get flung suddenly when placing it on ice cream~~
 - ice cream sometimes reverts to idle state, possibly caused when in contact with another ice cream when in attempttostick state
 - ice cream tray sometimes spawn multiple ice creams when mouse down is held
-- Performance intensive bug causes scooping ice cream to be much slower in the web build, to fix this , maybe invoke repeating can be used (IMPORTANT)
+- ~~Performance intensive bug causes scooping ice cream to be much slower in the web build, to fix this , maybe invoke repeating can be used (IMPORTANT)~~
