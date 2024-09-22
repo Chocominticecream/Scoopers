@@ -16,6 +16,9 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 21/9/2024 - finally finished the game!
 
+---
+### Task List:
+
 TODO:
 - ~~basic physics (clamping, sticking to bowl etc)~~
 - ~~stick to other ice cream based on rerolling an rng every second and checking if number is below a certain value~~
