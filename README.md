@@ -16,6 +16,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 21/9/2024 - finally finished the game!
 
+This branch just serves as an extra security measure as i try to refactor the jam code
+
 ---
 ### Task List:
 
