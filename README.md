@@ -16,6 +16,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 21/9/2024 - finally finished the game!
 
+This branch just serves as an extra security measure as i try to refactor the jam code
+
 ---
 ### Task List:
 
@@ -48,8 +50,8 @@ BUGS (those that i cannot recreate exactly at least)
 - ~~Performance intensive bug causes scooping ice cream to be much slower in the web build, to fix this , maybe invoke repeating can be used (IMPORTANT)~~
 
 post jam tasks(maybe i will do it, maybe i won't)
-- restructure the code so I can actually reuse it for future projects (im looking at the shopUI code)
-- second note on restructuring shop code, make selecting items in the shop decided by a boolean statement instead of a state machine
+- refactor the code so I can actually reuse it for future projects (im looking at the shopUI code)
+- ~~second note on refactoring shop code, make selecting items in the shop decided by a boolean statement instead of a state machine~~
 - rebalance mechanics as some playtesting with family members revealed that the game isn't fun in some areas (too hard, no goals)
 
 ---
