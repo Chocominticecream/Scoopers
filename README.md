@@ -19,6 +19,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 Game finished in 6th place!
 https://itch.io/jam/unity-jam-2024-cash-prizes/rate/2985441
 
+This game may be updated just to include changes proposed below, but I may not update it consistently as I am moving to another project
+
 ---
 ### Task List:
 
