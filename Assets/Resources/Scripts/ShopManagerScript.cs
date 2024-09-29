@@ -95,13 +95,9 @@ public class ShopManagerScript : MonoBehaviour
         {
             IceCreamUI iceCreamuiComponent = iceCreamUI.gameObject.GetComponent<IceCreamUI>();
 
-            if(iceCreamuiComponent.state == IceCreamUI.STATE.selectedInShop)
+            if(iceCreamuiComponent.selected)
             {
-                iceCreamuiComponent.state = IceCreamUI.STATE.inShop;
-            }
-            else if(iceCreamuiComponent.state == IceCreamUI.STATE.selectedlockedInShop)
-            {
-                iceCreamuiComponent.state = IceCreamUI.STATE.lockedInShop;
+                iceCreamuiComponent.selected = false;
             }
                 
         }
@@ -113,15 +109,7 @@ public class ShopManagerScript : MonoBehaviour
 
             if(selectedUIcomponent.name == iceCreamUI.gameObject.GetComponent<IceCreamUI>().name)
             {
-                if(iceCreamuiComponent.state == IceCreamUI.STATE.inShop)
-                {
-                    iceCreamuiComponent.state = IceCreamUI.STATE.selectedInShop;
-                }
-                else if(iceCreamuiComponent.state == IceCreamUI.STATE.lockedInShop)
-                {
-                    iceCreamuiComponent.state = IceCreamUI.STATE.selectedlockedInShop;
-                }
-                
+                    iceCreamuiComponent.selected = true;
             }
                 
         }
@@ -129,13 +117,14 @@ public class ShopManagerScript : MonoBehaviour
         selectedUIObject = selectedUI;
         print(selectedUI.GetComponent<IceCreamUI>().name);
         SetShopDescription(selectedUIObject);
+
     }
 
     public void ReplaceEquipped(string equippedObjName, Transform equippedSlot)
     {
         int slotIndex = equippedSlot.GetSiblingIndex();
         
-        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state != IceCreamUI.STATE.selectedlockedInShop)
+        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state != IceCreamUI.STATE.lockedInShop)
         {
             
             foreach(Transform iceCreamUI in shopSlots.transform)
@@ -186,14 +175,19 @@ public class ShopManagerScript : MonoBehaviour
         iceCreamScoopabilityText.text = "Scoopability: " + UIItemScriptable.scoopability;
         iceCreamStickinessText.text = "Stickiness: " +  UIItemScriptable.stickiness;
 
-        if(UIItemComponent.state == IceCreamUI.STATE.selectedlockedInShop)
+        if(UIItemComponent.state == IceCreamUI.STATE.lockedInShop)
         {
             iceCreamUnlockedText.text = "Locked";
             buyItemButton.SetActive(true);
         }
-        else if(UIItemComponent.state == IceCreamUI.STATE.selectedInShop)
+        else if(UIItemComponent.state == IceCreamUI.STATE.inShop)
         {
             iceCreamUnlockedText.text = "Unlocked!";
+            buyItemButton.SetActive(false);
+        }
+        else if(UIItemComponent.state == IceCreamUI.STATE.equippedInShop)
+        {
+            iceCreamUnlockedText.text = "Equipped!";
             buyItemButton.SetActive(false);
         }
        
@@ -201,7 +195,7 @@ public class ShopManagerScript : MonoBehaviour
 
     public void BuyItem()
     {
-        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state == IceCreamUI.STATE.selectedlockedInShop)
+        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state == IceCreamUI.STATE.lockedInShop)
         {
             IceCreamUI iceCreamComponent = selectedUIObject.GetComponent<IceCreamUI>();
             int icecreamcost = iceCreamComponent.cost;
@@ -210,7 +204,8 @@ public class ShopManagerScript : MonoBehaviour
             {
                 money -= icecreamcost;
                 singleton.money -= icecreamcost;
-                iceCreamComponent.state = IceCreamUI.STATE.selectedInShop;
+                iceCreamComponent.selected = true;
+                iceCreamComponent.state = IceCreamUI.STATE.inShop;
                 singleton.unlocked.Add(iceCreamComponent.name);
                 SetShopDescription(selectedUIObject);
             }
