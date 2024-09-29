@@ -78,7 +78,7 @@ public class LoadShopItems : MonoBehaviour
     public void ScrollShop(bool rightScroll)
     {
         float scrollValue = 850 / 6;
-        int scrollFactor = singleton.allIceCreams.Length - 6;
+        int scrollFactor = shopSlots.transform.childCount - 6;
         if(rightScroll)
         {
             if(currentScroll < scrollFactor)

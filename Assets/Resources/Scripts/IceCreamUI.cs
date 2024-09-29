@@ -9,7 +9,7 @@ public class IceCreamUI : MonoBehaviour
 {
     public UnityEvent selectClick;
     public UnityEvent alternateClick;
-    public enum STATE {equipped, inShop, selectedInShop, lockedInShop, selectedlockedInShop, equippedInShop};
+    public enum STATE {equipped, inShop, lockedInShop, equippedInShop};
 
     private RectTransform recttransform;
     [SerializeField] private GameObject selectedIndicator;
@@ -23,9 +23,11 @@ public class IceCreamUI : MonoBehaviour
     private Image imageComponent;
 
     
+    //state handlers - used by shop manager
     public string name = "";
     public int cost = 0;
     public STATE state = STATE.lockedInShop;
+    public bool selected = false;
 
     private IceCreamScriptable _iceCreamObj;
 
@@ -56,27 +58,25 @@ public class IceCreamUI : MonoBehaviour
             normaliseColor();
         }
 
-        if(state != STATE.selectedInShop && state != STATE.selectedlockedInShop)
+        if(selected)
+        {
+            selectedIndicator.SetActive(true);
+        }
+        else
         {
             selectedIndicator.SetActive(false);
         }
 
-        if(state != STATE.lockedInShop && state != STATE.selectedlockedInShop)
+        if(state != STATE.lockedInShop)
         {
             lockedIndicator.SetActive(false);
         }
+
 
         switch(state)
         {
             case STATE.equippedInShop:
                 DarkenColor();
-                break;
-            case STATE.selectedInShop:
-                selectedIndicator.SetActive(true);
-                break;
-            case STATE.selectedlockedInShop:
-                selectedIndicator.SetActive(true);
-                lockedIndicator.SetActive(true);
                 break;
             case STATE.lockedInShop:
                 lockedIndicator.SetActive(true);
@@ -104,7 +104,7 @@ public class IceCreamUI : MonoBehaviour
 
     public void OnClick()
     {
-        if(state == STATE.inShop || state == STATE.lockedInShop)
+        if(state != STATE.equipped)
         {
             selectClick.Invoke();
         }
