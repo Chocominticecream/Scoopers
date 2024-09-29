@@ -124,7 +124,8 @@ public class ShopManagerScript : MonoBehaviour
     {
         int slotIndex = equippedSlot.GetSiblingIndex();
         
-        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state != IceCreamUI.STATE.lockedInShop)
+        if(selectedUIObject != null && selectedUIObject.GetComponent<IceCreamUI>().state != IceCreamUI.STATE.lockedInShop
+           && selectedUIObject.GetComponent<IceCreamUI>().state != IceCreamUI.STATE.equippedInShop)
         {
             
             foreach(Transform iceCreamUI in shopSlots.transform)
@@ -159,7 +160,9 @@ public class ShopManagerScript : MonoBehaviour
             singleton.iceCreamsUsed[slotIndex] = selectedUIObject.GetComponent<IceCreamUI>().iceCreamObj;
 
             //free the selecteduiobject
+            SetShopDescription(selectedUIObject);
             selectedUIObject = null;
+            
         }
         
 
@@ -214,7 +217,8 @@ public class ShopManagerScript : MonoBehaviour
                 Instantiate(spawnText, moneytextcomponent.transform);
             }
 
-        }    
+        }
+        SetShopDescription(selectedUIObject);   
         
     }
 
