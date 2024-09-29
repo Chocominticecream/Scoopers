@@ -16,7 +16,8 @@ after creating three basic ice cream objects, might wanna go for art and polish 
 
 21/9/2024 - finally finished the game!
 
-This branch just serves as an extra security measure as i try to refactor the jam code
+Game finished in 6th place!
+https://itch.io/jam/unity-jam-2024-cash-prizes/rate/2985441
 
 ---
 ### Task List:
@@ -66,6 +67,8 @@ post jam tasks(maybe i will do it, maybe i won't)
 ![promogif3](https://github.com/user-attachments/assets/d7723fda-a26a-4551-9086-a331c8c06125)
 
 ![promotionimage](https://github.com/user-attachments/assets/28d4caba-1684-40b8-a6dd-64b8139640af)
+
+
 
 
 
